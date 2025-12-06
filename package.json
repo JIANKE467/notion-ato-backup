@@ -1,0 +1,9 @@
+{
+  "name": "notion-workspace-backup",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@notionhq/client": "^2.2.3",
+    "notion-to-md": "^3.0.0"
+  }
+}

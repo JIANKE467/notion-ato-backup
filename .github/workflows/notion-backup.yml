@@ -1,0 +1,35 @@
+name: Notion Workspace Backup
+
+on:
+  schedule:
+    - cron: "0 3 * * *"  # 每天凌晨 3 点运行
+  workflow_dispatch:      # 支持手动触发
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run backup script
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: node backup.js
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "actions@github"
+          git config --local user.name "GitHub Actions"
+          git add .
+          git commit -m "Auto backup: $(date -u +'%Y-%m-%d %H:%M:%S')" || echo "No changes"
+          git push
